@@ -1,0 +1,105 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <cstdlib>
+using namespace std;
+
+vector<char> wagony;
+vector<vector<char>> tory={{'A', 'A', 'B', 'B'},
+                           {'A', 'B', 'A', 'B'},
+                           {'C', 'D', 'A'},
+                           {'A', 'B', 'B', 'C'},
+                           {'A', 'B', 'D'}};
+int punkty=0;
+
+void generuj_wagony(){
+    int size=tory[0].size()+tory[1].size()+tory[2].size()+tory[3].size()+tory[4].size();
+    string seria="AAAABBBBABABDCDCBA";
+    for (char w : seria) {
+        wagony.push_back(w);
+    }
+}
+
+bool sprawdz_sklad(int torNum, char wagon) {
+    torNum-=1;
+    if(tory[torNum].back()==wagon){return true;}
+    else {return false;}
+}
+
+void drawtor(int i){
+    for(int j=0;j<tory[i].size();j++){
+        cout<<tory[i][j];
+    }
+}
+
+void draw(){
+    cout<<wagony.back()<<"====O=(1)=====";drawtor(0);
+    cout<<endl;
+    cout<<"      \\(2)=====";drawtor(1);
+    cout<<endl;
+    cout<<"       \\(3)====";drawtor(2);
+    cout<<endl;
+    cout<<"        \\(4)===";drawtor(3);
+    cout<<endl;
+    cout<<"         \\(5)==";drawtor(4);
+    cout<<endl;
+    //|__|= sizeoftabeli
+}
+
+int notemptytor(){
+    for(int i=0;i<tory.size();i++){
+        if(!tory[i].empty()){
+            return i+1;
+        }
+    }
+    return 0;
+}
+
+int main() {
+    srand (time(NULL));
+    generuj_wagony();
+    while(true){
+        int wybor;
+        char w='a';
+    //0.wizualizacja
+
+    //1.wybór gdzie
+        while(true){
+            draw();
+        wybor=notemptytor();
+        w='a';
+        cout<<"podaj gdzie: ";
+        cin>>wybor;
+            if (wybor<1||wybor>5||tory[wybor-1].empty()){
+                cout<<"prosze podac liczby z zakresu"<<endl;
+                continue;
+            }
+        cin>>w;
+        if(w=='w'){
+            break;
+        }
+        
+    }
+    
+    //2.sprawdzenie czy dobrz/pop_back,   wybor ->punkty
+
+    cout<<endl;
+    if(sprawdz_sklad(wybor,wagony.back())){
+        tory[wybor-1].pop_back();
+        wagony.pop_back();
+    }else{
+        punkty-=10;
+    }
+
+    if(punkty<0){
+        cout<<"przegrales  :(";
+        return 0;
+    }
+
+    if(punkty==50||notemptytor==0){
+        cout<<"BRAWO WYGRALES!!  :)";
+        return 0;
+    }
+}
+    return 0;
+}
